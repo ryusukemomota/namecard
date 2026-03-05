@@ -1,0 +1,7 @@
+node_modules
+.next
+amplify_outputs.json
+.amplify
+dist
+.env
+.DS_Store
