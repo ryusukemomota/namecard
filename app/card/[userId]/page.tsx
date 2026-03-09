@@ -5,6 +5,7 @@ import { generateClient } from 'aws-amplify/data';
 import { getUrl } from 'aws-amplify/storage';
 import type { Schema } from '@/amplify/data/resource';
 import { useParams } from 'next/navigation';
+import { QRCodeSVG } from 'qrcode.react';
 
 const client = generateClient<Schema>({
   authMode: 'apiKey'
@@ -16,8 +17,12 @@ export default function PublicCardPage() {
   const [card, setCard] = useState<any>(null);
   const [iconUrl, setIconUrl] = useState<string>('');
   const [loading, setLoading] = useState(true);
+  const [currentUrl, setCurrentUrl] = useState<string>('');
 
   useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setCurrentUrl(window.location.href);
+    }
     loadCard();
   }, [userId]);
 
@@ -151,6 +156,26 @@ export default function PublicCardPage() {
                 🐙
               </a>
             )}
+          </div>
+        )}
+
+        {currentUrl && (
+          <div style={{ 
+            marginTop: '1.5rem',
+            paddingTop: '1.5rem',
+            borderTop: '1px solid #eee',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: '0.5rem'
+          }}>
+            <p style={{ fontSize: '0.9rem', color: '#666' }}>この名刺をシェア</p>
+            <QRCodeSVG 
+              value={currentUrl} 
+              size={150}
+              level="H"
+              includeMargin={true}
+            />
           </div>
         )}
 
